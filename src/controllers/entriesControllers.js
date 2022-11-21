@@ -58,7 +58,7 @@ export async function getEntries (req, res){
       descricao,
       tipo,
       data: dayjs().format("DD/MM/YYYY"),
-      userId: token
+      token: token
     });
 
     res.status(201).send("Transação criada com sucesso");

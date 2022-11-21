@@ -13,6 +13,11 @@ export const userSchema = joi.object({
   password: joi.string().alphanum().min(6).required()
 })
 
+export const userLoginSchema = joi.object({
+  email: joi.string().email().required(),
+  password: joi.string().alphanum().min(6).required()
+})
+
 export const entrySchema = joi.object({
   valor: joi.number().required(),
   descricao: joi.string().required().min(1),

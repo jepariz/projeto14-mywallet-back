@@ -1,4 +1,4 @@
-import { userSchema} from "../index.js";
+import { userSchema, userLoginSchema} from "../index.js";
 import {usersCollection, sessionCollection} from "../database/db.js"
 import bcrypt from "bcrypt"
 import {v4 as uuid} from "uuid"
@@ -32,22 +32,31 @@ export async function registerUser (req, res) {
 
   export async function userSignIn (req, res) {
     const { email, password } = req.body;
+
+    const { error } = userLoginSchema.validate(req.body, { abortEarly: false });
+  
+    if (error) {
+      const errors = error.details.map((detail) => detail.message);
+      return res.status(400).send(errors);
+    }
     
     const user = await usersCollection.findOne({ email });
+    console.log(user)
   
     const passwordOk = bcrypt.compareSync(password, user.password)
+
   
     if(user && passwordOk) {
         const token = uuid();
+        const username = user.name
         
         await sessionCollection.insertOne({
           userId: user._id,
           token
         })
-        res.send(token);
+        res.send({token, username});
     }
     if(!password || !user){
       return res.sendStatus(401)
     }
-  
   }
