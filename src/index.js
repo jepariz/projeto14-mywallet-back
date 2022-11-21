@@ -20,7 +20,7 @@ export const userLoginSchema = joi.object({
 
 export const entrySchema = joi.object({
   valor: joi.number().required(),
-  descricao: joi.string().required().min(1),
+  descricao: joi.string().required().min(1).max(18),
   tipo: joi.string().valid("entrada", "saída")
 })
 

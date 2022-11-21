@@ -26,6 +26,7 @@ export async function getEntries (req, res){
 
   try{
     const entries = await entriesCollections.find({user: user._id}).toArray()
+ 
 		res.send(entries);
   } catch (error) {
     console.log(error);
@@ -68,6 +69,7 @@ export async function getEntries (req, res){
       data: dayjs().format("DD/MM/YYYY"),
       user: user._id
     })
+
 
     res.status(201).send("Transação criada com sucesso");
 
