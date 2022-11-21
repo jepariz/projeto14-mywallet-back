@@ -13,6 +13,12 @@ export const userSchema = joi.object({
   password: joi.string().alphanum().min(6).required()
 })
 
+export const entrySchema = joi.object({
+  valor: joi.number().required(),
+  descricao: joi.string().required().min(1),
+  tipo: joi.string().valid("entrada", "saída")
+})
+
 const app = express();
 
 dotenv.config();

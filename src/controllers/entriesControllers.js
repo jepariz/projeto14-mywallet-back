@@ -1,5 +1,6 @@
 import {usersCollection, sessionCollection, entriesCollections} from "../database/db.js"
 import dayjs from "dayjs";
+import { entrySchema } from "../index.js";
 
 
 export async function getEntries (req, res){
@@ -29,6 +30,14 @@ export async function getEntries (req, res){
     
     const { authorization } = req.headers; 
     const {valor, descricao, tipo} = req.body
+
+        
+    const { error } = entrySchema.validate(req.body, { abortEarly: false });
+  
+    if (error) {
+      const errors = error.details.map((detail) => detail.message);
+      return res.status(400).send(errors);
+    }
   
     const token = authorization?.replace("Bearer ", "");
   
