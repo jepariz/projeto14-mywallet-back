@@ -16,8 +16,16 @@ export async function getEntries (req, res){
       return res.sendStatus(401);
   }
 
+  const user = await usersCollection.findOne({ _id: session?.userId });
+ 
+  delete user.password
+
+    if (!user) {
+      return res.sendStatus(401);
+    }
+
   try{
-    const entries = await entriesCollections.find({userId: token}).toArray()
+    const entries = await entriesCollections.find({user: user._id}).toArray()
 		res.send(entries);
   } catch (error) {
     console.log(error);
@@ -58,8 +66,8 @@ export async function getEntries (req, res){
       descricao,
       tipo,
       data: dayjs().format("DD/MM/YYYY"),
-      token: token
-    });
+      user: user._id
+    })
 
     res.status(201).send("Transação criada com sucesso");
 
